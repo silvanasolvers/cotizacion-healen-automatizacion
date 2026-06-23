@@ -6,14 +6,17 @@ const html = fs.readFileSync(htmlPath, "utf8");
 
 const required = [
   "Healen",
-  "Telegram",
   "Excel",
-  "$1.500.000 COP",
-  "tratamientos",
-  "puntos",
-  "ventas",
+  "$2.800.000 COP",
+  "$3.500.000 COP",
+  "Fase 1",
+  "Control de inventario",
+  "Control de clientes",
   "ingresos",
-  "egresos"
+  "egresos",
+  "50% iniciando",
+  "25% antes de terminar",
+  "25% finalizando"
 ];
 
 const missing = required.filter((item) => !html.includes(item));

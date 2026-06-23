@@ -3,37 +3,38 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Healen | Sistema de alertas Excel + Telegram</title>
-  <meta name="description" content="Cotización SolversAI para Healen: base de datos en Excel con alertas Telegram para tratamientos, puntos a vencer, ventas, ingresos y egresos.">
+  <title>Healen | Fase 1 de control operativo</title>
+  <meta name="description" content="Cotización SolversAI para Healen: fase 1 medicinal con control de inventario, clientes, ingresos y egresos.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --ink: #111413;
-      --muted: #69716e;
-      --paper: #fffdf7;
-      --soft: #f4efe4;
-      --mist: #e4f1ec;
-      --line: rgba(17, 20, 19, 0.13);
-      --green: #0f7a5f;
-      --green-dark: #0a4f40;
-      --rose: #d96f76;
-      --gold: #b6852d;
+      --ink: #17111f;
+      --muted: #70667d;
       --white: #ffffff;
-      --shadow: 0 24px 70px rgba(22, 38, 32, 0.16);
+      --paper: #fbf9ff;
+      --soft: #f3edff;
+      --lilac: #efe4ff;
+      --purple: #6f35d7;
+      --purple-dark: #3b167f;
+      --violet: #9b6bff;
+      --green: #4f9b7a;
+      --line: rgba(59, 22, 127, 0.14);
+      --shadow: 0 24px 80px rgba(59, 22, 127, 0.16);
     }
 
     * { box-sizing: border-box; }
-
     html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
-      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--ink);
-      background: var(--paper);
-      line-height: 1.55;
+      background:
+        linear-gradient(120deg, rgba(111,53,215,0.08), transparent 34%),
+        var(--paper);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.48;
       letter-spacing: 0;
     }
 
@@ -42,14 +43,14 @@
     .topbar {
       position: fixed;
       inset: 0 0 auto 0;
-      z-index: 40;
+      z-index: 20;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 18px;
-      padding: 18px clamp(18px, 4vw, 42px);
-      background: rgba(255, 253, 247, 0.86);
-      border-bottom: 1px solid rgba(17, 20, 19, 0.08);
+      gap: 16px;
+      padding: 16px clamp(18px, 4vw, 44px);
+      background: rgba(255, 255, 255, 0.88);
+      border-bottom: 1px solid var(--line);
       backdrop-filter: blur(18px);
     }
 
@@ -63,32 +64,28 @@
     .brand-mark {
       width: 42px;
       height: 42px;
-      border-radius: 8px;
       display: grid;
       place-items: center;
-      background: var(--green-dark);
+      border-radius: 8px;
       color: white;
+      background: var(--purple-dark);
       font-weight: 900;
     }
 
-    .brand strong {
+    .brand strong,
+    .brand span {
       display: block;
+    }
+
+    .brand strong {
       font-size: 15px;
       font-weight: 900;
       line-height: 1.1;
     }
 
     .brand span {
-      display: block;
       color: var(--muted);
       font-size: 12px;
-      white-space: nowrap;
-    }
-
-    .top-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
     }
 
     .button {
@@ -99,66 +96,64 @@
       padding: 0 16px;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: var(--white);
-      color: var(--ink);
+      background: white;
+      color: var(--purple-dark);
       font-size: 14px;
-      font-weight: 800;
-      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+      font-weight: 900;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
     }
 
     .button:hover {
       transform: translateY(-1px);
-      border-color: rgba(15, 122, 95, 0.38);
-      background: var(--mist);
+      border-color: rgba(111, 53, 215, 0.42);
+      background: var(--soft);
     }
 
     .button.primary {
       color: white;
-      border-color: var(--green);
-      background: var(--green);
+      border-color: var(--purple);
+      background: var(--purple);
     }
 
     .hero {
       min-height: 100svh;
       display: grid;
-      grid-template-columns: minmax(0, 1.04fr) minmax(320px, 0.82fr);
-      gap: clamp(28px, 5vw, 70px);
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 0.58fr);
+      gap: clamp(28px, 5vw, 64px);
       align-items: center;
-      padding: 118px clamp(20px, 5vw, 74px) 52px;
+      padding: 118px clamp(20px, 5vw, 72px) 48px;
       background:
-        linear-gradient(120deg, rgba(255,253,247,0.98) 0%, rgba(255,253,247,0.86) 49%, rgba(255,253,247,0.18) 100%),
+        linear-gradient(90deg, rgba(255,255,255,0.97) 0%, rgba(255,255,255,0.84) 54%, rgba(255,255,255,0.62) 100%),
         url("/assets/healen-visual.jpg") center right / cover no-repeat;
       border-bottom: 1px solid var(--line);
     }
 
     .eyebrow {
       display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin: 0 0 22px;
+      margin: 0 0 20px;
       padding: 8px 12px;
-      border: 1px solid rgba(15, 122, 95, 0.22);
+      border: 1px solid rgba(111,53,215,0.22);
       border-radius: 8px;
-      background: rgba(255, 255, 255, 0.66);
-      color: var(--green-dark);
+      background: rgba(255,255,255,0.78);
+      color: var(--purple-dark);
       font-size: 12px;
       font-weight: 900;
       text-transform: uppercase;
     }
 
     h1 {
-      max-width: 850px;
+      max-width: 930px;
       margin: 0;
-      font-size: clamp(42px, 7vw, 88px);
-      line-height: 0.94;
+      font-size: clamp(44px, 7.4vw, 96px);
+      line-height: 0.92;
       letter-spacing: 0;
     }
 
     .lead {
       max-width: 720px;
       margin: 26px 0 0;
-      color: #38423e;
-      font-size: clamp(18px, 2vw, 24px);
+      color: #342845;
+      font-size: clamp(18px, 2vw, 23px);
       line-height: 1.45;
     }
 
@@ -169,95 +164,80 @@
       margin-top: 34px;
     }
 
-    .hero-panel {
-      align-self: end;
-      padding: 24px;
-      border: 1px solid rgba(255,255,255,0.42);
+    .price-panel {
+      padding: 26px;
+      border: 1px solid rgba(111,53,215,0.18);
       border-radius: 8px;
-      background: rgba(255, 255, 255, 0.76);
+      background: rgba(255,255,255,0.88);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(22px);
+      backdrop-filter: blur(18px);
     }
 
-    .price-label {
-      margin: 0 0 8px;
-      color: var(--muted);
+    .panel-label,
+    .tag {
+      color: var(--purple);
       font-size: 12px;
       font-weight: 900;
       text-transform: uppercase;
-      letter-spacing: 1.8px;
+      letter-spacing: 1.3px;
     }
+
+    .panel-label { margin: 0 0 10px; }
 
     .price {
       margin: 0;
-      font-size: clamp(36px, 5vw, 58px);
+      color: var(--purple-dark);
+      font-size: clamp(42px, 6vw, 66px);
       line-height: 1;
       font-weight: 900;
-      color: var(--green-dark);
     }
 
-    .strike {
-      display: inline-block;
-      margin-top: 14px;
+    .regular {
+      display: block;
+      margin-top: 12px;
       color: var(--muted);
-      font-size: 14px;
+      font-size: 15px;
     }
 
-    .strike span {
-      text-decoration: line-through;
-    }
+    .regular span { text-decoration: line-through; }
 
-    .panel-list {
+    .pay-list {
       display: grid;
-      gap: 12px;
+      gap: 10px;
       margin: 22px 0 0;
       padding: 0;
       list-style: none;
     }
 
-    .panel-list li {
-      display: grid;
-      grid-template-columns: 28px 1fr;
-      gap: 10px;
-      align-items: start;
-      font-weight: 700;
-      color: #25312d;
-    }
-
-    .check {
-      width: 28px;
-      height: 28px;
-      display: grid;
-      place-items: center;
+    .pay-list li {
+      padding: 12px 14px;
       border-radius: 8px;
-      color: white;
-      background: var(--green);
-      font-size: 14px;
-      font-weight: 900;
+      background: var(--soft);
+      color: #2f2244;
+      font-weight: 800;
     }
 
     section {
-      padding: clamp(54px, 8vw, 96px) clamp(20px, 5vw, 74px);
+      padding: clamp(54px, 8vw, 92px) clamp(20px, 5vw, 72px);
       border-bottom: 1px solid var(--line);
     }
 
     .section-head {
       display: grid;
-      grid-template-columns: minmax(0, 0.76fr) minmax(280px, 0.42fr);
-      gap: 28px;
+      grid-template-columns: minmax(0, 0.9fr) minmax(260px, 0.42fr);
+      gap: 24px;
       align-items: end;
-      margin-bottom: 34px;
+      margin-bottom: 28px;
     }
 
     h2 {
       margin: 0;
-      font-size: clamp(32px, 4.8vw, 58px);
+      font-size: clamp(32px, 5vw, 62px);
       line-height: 1;
       letter-spacing: 0;
     }
 
-    .section-head p,
-    .muted {
+    .section-head p {
       margin: 0;
       color: var(--muted);
       font-size: 17px;
@@ -270,23 +250,23 @@
     }
 
     .card {
-      min-height: 220px;
-      padding: 22px;
+      min-height: 230px;
+      padding: 24px;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: var(--white);
-      box-shadow: 0 14px 34px rgba(22, 38, 32, 0.07);
+      background: white;
+      box-shadow: 0 16px 38px rgba(59, 22, 127, 0.08);
     }
 
-    .card.kpi {
-      background: var(--green-dark);
+    .card.feature {
       color: white;
+      background: linear-gradient(145deg, var(--purple-dark), var(--purple));
     }
 
     .card h3 {
-      margin: 0 0 14px;
-      font-size: 22px;
-      line-height: 1.1;
+      margin: 14px 0 12px;
+      font-size: 24px;
+      line-height: 1.08;
     }
 
     .card p {
@@ -294,125 +274,86 @@
       color: var(--muted);
     }
 
-    .card.kpi p,
-    .card.kpi .tag {
+    .card.feature p,
+    .card.feature .tag {
       color: rgba(255,255,255,0.78);
     }
 
-    .tag {
-      display: inline-block;
-      margin-bottom: 18px;
-      color: var(--green);
-      font-size: 12px;
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: var(--lilac);
+      color: var(--purple-dark);
+      font-size: 13px;
       font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-    }
-
-    .workflow {
-      background: var(--soft);
-    }
-
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-      counter-reset: step;
-    }
-
-    .step {
-      position: relative;
-      min-height: 190px;
-      padding: 22px;
-      border: 1px solid rgba(17, 20, 19, 0.11);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.72);
-    }
-
-    .step::before {
-      counter-increment: step;
-      content: "0" counter(step);
-      display: inline-grid;
-      place-items: center;
-      width: 38px;
-      height: 38px;
-      margin-bottom: 18px;
-      border-radius: 8px;
-      background: var(--green-dark);
-      color: white;
-      font-weight: 900;
-    }
-
-    .step h3 {
-      margin: 0 0 10px;
-      font-size: 18px;
-    }
-
-    .step p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 15px;
     }
 
     .scope {
-      display: grid;
-      grid-template-columns: minmax(0, 0.95fr) minmax(300px, 0.58fr);
-      gap: 20px;
-      align-items: start;
+      background: white;
     }
 
-    .deliverables {
+    .compact-list {
       display: grid;
-      gap: 10px;
+      gap: 12px;
       margin: 0;
       padding: 0;
       list-style: none;
     }
 
-    .deliverables li {
-      padding: 16px 18px;
+    .compact-list li {
+      padding: 18px 20px;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: white;
-      font-weight: 700;
+      background: var(--paper);
+      font-size: 18px;
+      font-weight: 800;
     }
 
     .investment {
-      background: #0e1714;
       color: white;
+      background:
+        linear-gradient(135deg, rgba(155,107,255,0.28), transparent 54%),
+        var(--purple-dark);
     }
 
     .investment .section-head p {
-      color: rgba(255,255,255,0.66);
+      color: rgba(255,255,255,0.7);
     }
 
     .investment-box {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(320px, 0.52fr);
-      gap: 20px;
-      align-items: stretch;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 0.52fr);
+      gap: 18px;
     }
 
-    .price-card,
-    .terms-card {
+    .quote-card {
       padding: clamp(24px, 4vw, 38px);
-      border: 1px solid rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.15);
       border-radius: 8px;
-      background: rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.08);
     }
 
-    .price-card .price {
-      color: #89e8ca;
-      font-size: clamp(46px, 7vw, 76px);
+    .investment .price {
+      color: white;
+      font-size: clamp(48px, 7vw, 78px);
     }
 
-    .price-card p,
-    .terms-card p,
-    .terms-card li {
-      color: rgba(255,255,255,0.72);
+    .quote-card p,
+    .quote-card li {
+      color: rgba(255,255,255,0.76);
     }
 
-    .terms-card ul {
+    .quote-card ul {
       display: grid;
       gap: 10px;
       margin: 0;
@@ -425,13 +366,13 @@
     }
 
     .cta h2 {
-      max-width: 900px;
+      max-width: 880px;
       margin: 0 auto;
     }
 
     .cta p {
-      max-width: 720px;
-      margin: 22px auto 0;
+      max-width: 680px;
+      margin: 20px auto 0;
       color: var(--muted);
       font-size: 18px;
     }
@@ -440,207 +381,150 @@
       display: flex;
       justify-content: space-between;
       gap: 18px;
-      padding: 26px clamp(20px, 5vw, 74px);
+      padding: 24px clamp(20px, 5vw, 72px);
       color: var(--muted);
       font-size: 13px;
     }
 
     @media (max-width: 900px) {
-      .topbar {
-        position: static;
-      }
-
-      .top-actions .button:not(.primary) {
-        display: none;
-      }
-
+      .topbar { position: static; }
+      .topbar .button { display: none; }
       .hero {
         min-height: auto;
         grid-template-columns: 1fr;
-        padding-top: 48px;
+        padding-top: 46px;
         background:
-          linear-gradient(180deg, rgba(255,253,247,0.98), rgba(255,253,247,0.84)),
+          linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.82)),
           url("/assets/healen-visual.jpg") center / cover no-repeat;
       }
-
-      .hero-panel {
-        align-self: auto;
-      }
-
       .section-head,
-      .scope,
+      .grid,
       .investment-box {
         grid-template-columns: 1fr;
       }
-
-      .grid,
-      .steps {
-        grid-template-columns: 1fr;
-      }
-
-      footer {
-        flex-direction: column;
-      }
+      footer { flex-direction: column; }
     }
   </style>
 </head>
 <body>
   <header class="topbar">
-    <a class="brand" href="#inicio" aria-label="Ir al inicio">
-      <span class="brand-mark">S</span>
+    <a class="brand" href="#inicio" aria-label="Inicio">
+      <span class="brand-mark">H</span>
       <span>
-        <strong>SolversAI para Healen</strong>
-        <span>Cotización automatización comercial</span>
+        <strong>Healen · Fase 1</strong>
+        <span>Control medicinal operativo</span>
       </span>
     </a>
-    <nav class="top-actions" aria-label="Acciones">
-      <a class="button" href="#alcance">Alcance</a>
-      <a class="button" href="#inversion">Inversión</a>
-      <a class="button primary" href="#aprobar">Aprobar propuesta</a>
-    </nav>
+    <a class="button primary" href="#inversion">Ver inversión</a>
   </header>
 
   <main id="inicio">
     <section class="hero">
       <div>
-        <p class="eyebrow">Base de datos + alertas Telegram</p>
-        <h1>Que ningún tratamiento, punto o meta comercial se vuelva a quedar en el aire.</h1>
+        <p class="eyebrow">Fase 1 · Base de control medicinal</p>
+        <h1>Si no está medido, se pierde. Si se pierde, deja de vender.</h1>
         <p class="lead">
-          Una base en Excel bien organizada, conectada a Telegram, para que Healen tenga recordatorios automáticos de clientes, puntos por vencer, metas de ventas, ingresos y egresos sin depender de memoria, chats sueltos o revisiones manuales.
+          Healen necesita una base clara para controlar inventario, clientes y dinero sin perseguir datos en chats, cuadernos o archivos sueltos.
         </p>
         <div class="hero-actions">
-          <a class="button primary" href="#inversion">Ver precio especial</a>
-          <a class="button" href="#como-funciona">Cómo funcionaría</a>
+          <a class="button primary" href="#alcance">Ver qué incluye</a>
+          <a class="button" href="#aprobar">Aprobar inicio</a>
         </div>
       </div>
 
-      <aside class="hero-panel" aria-label="Resumen de inversión">
-        <p class="price-label">Pago único especial por amistad</p>
-        <p class="price">$1.500.000 COP</p>
-        <span class="strike">Valor regular estimado: <span>$2.400.000 COP</span></span>
-        <ul class="panel-list">
-          <li><span class="check">✓</span><span>Excel estructurado como centro de control.</span></li>
-          <li><span class="check">✓</span><span>Alertas Telegram para vencimientos y seguimiento.</span></li>
-          <li><span class="check">✓</span><span>Notificaciones de metas, ingresos y egresos.</span></li>
-          <li><span class="check">✓</span><span>Entrega funcional + capacitación inicial.</span></li>
+      <aside class="price-panel" aria-label="Resumen comercial">
+        <p class="panel-label">Pago único especial</p>
+        <p class="price">$2.800.000</p>
+        <span class="regular">Normalmente: <span>$3.500.000</span></span>
+        <ul class="pay-list">
+          <li>50% iniciando</li>
+          <li>25% antes de terminar</li>
+          <li>25% finalizando</li>
         </ul>
       </aside>
     </section>
 
-    <section id="dolor">
+    <section id="alcance" class="scope">
       <div class="section-head">
-        <h2>El problema no es vender más. Es no dejar plata sin gestionar.</h2>
-        <p>Healen ya tiene clientes, tratamientos, recompensas, ventas y flujo de caja. Lo que falta es que esa información trabaje sola y avise antes de que algo se pierda.</p>
+        <h2>Lo primero es ordenar la operación.</h2>
+        <p>Antes de automatizar más, Healen necesita una base confiable para saber qué tiene, quién compra y cómo se mueve la plata.</p>
       </div>
 
       <div class="grid">
-        <article class="card">
-          <span class="tag">Clientes</span>
-          <h3>Tratamientos que necesitan seguimiento</h3>
-          <p>Alertas para saber quién debe volver, qué tratamiento tiene pendiente y cuándo conviene escribirle.</p>
+        <article class="card feature">
+          <span class="tag">Módulo 01</span>
+          <h3>Control de inventario</h3>
+          <p>Registro organizado de productos medicinales, cantidades, movimientos y alertas internas para evitar perder control del stock.</p>
         </article>
         <article class="card">
-          <span class="tag">Fidelización</span>
-          <h3>Puntos próximos a vencer</h3>
-          <p>Recordatorios antes de que los puntos expiren para activar recompra, agenda y retención.</p>
+          <span class="tag">Módulo 02</span>
+          <h3>Control de clientes</h3>
+          <p>Base limpia para consultar clientes, historial, seguimiento y datos clave para vender mejor sin depender de la memoria.</p>
         </article>
-        <article class="card kpi">
-          <span class="tag">Gerencia</span>
-          <h3>Metas, ingresos y egresos en radar</h3>
-          <p>Notificaciones para no esperar a fin de mes para saber si el negocio va bien o necesita empuje.</p>
+        <article class="card">
+          <span class="tag">Módulo 03</span>
+          <h3>Ingresos y egresos</h3>
+          <p>Visibilidad simple del dinero que entra y sale para entender margen, flujo y decisiones comerciales.</p>
         </article>
+      </div>
+
+      <div class="pill-row" aria-label="Características del sistema">
+        <span class="pill">Excel operativo</span>
+        <span class="pill">Base medicinal</span>
+        <span class="pill">Fase 1 escalable</span>
+        <span class="pill">Entrega guiada</span>
       </div>
     </section>
 
-    <section id="como-funciona" class="workflow">
+    <section>
       <div class="section-head">
-        <h2>Un sistema simple para que el equipo lo use de verdad.</h2>
-        <p>No proponemos una plataforma pesada. Proponemos una herramienta clara, en Excel, con automatizaciones que avisan por Telegram justo cuando toca actuar.</p>
+        <h2>¿Qué compra Healen?</h2>
+        <p>Una herramienta concreta para dejar de improvisar y empezar a controlar la operación desde una sola base.</p>
       </div>
 
-      <div class="steps">
-        <article class="step">
-          <h3>Se registra la información</h3>
-          <p>Clientes, tratamientos, fechas, puntos, ventas, ingresos y egresos quedan en una base ordenada.</p>
-        </article>
-        <article class="step">
-          <h3>El sistema revisa fechas y metas</h3>
-          <p>La automatización valida vencimientos, próximos seguimientos y desempeño comercial.</p>
-        </article>
-        <article class="step">
-          <h3>Telegram avisa a tiempo</h3>
-          <p>El equipo recibe mensajes accionables: a quién escribir, qué revisar y qué meta está en riesgo.</p>
-        </article>
-        <article class="step">
-          <h3>Healen vende y retiene mejor</h3>
-          <p>Menos olvidos, más seguimiento, más recompra y más control sobre la caja.</p>
-        </article>
-      </div>
-    </section>
-
-    <section id="alcance">
-      <div class="section-head">
-        <h2>Alcance incluido</h2>
-        <p>La primera versión queda lista para operar y crecer. Se construye pensando en que Healen pueda usarla sin depender de un técnico todos los días.</p>
-      </div>
-
-      <div class="scope">
-        <ul class="deliverables">
-          <li>Diseño de base en Excel con hojas para clientes, tratamientos, puntos, ventas, ingresos y egresos.</li>
-          <li>Campos recomendados para fecha de tratamiento, próxima visita, puntos acumulados, puntos por vencer y responsable.</li>
-          <li>Alertas automáticas por Telegram para tratamientos próximos, puntos a vencer y oportunidades de seguimiento.</li>
-          <li>Notificaciones de metas de ventas: avance, alertas de bajo ritmo y cierres de periodo.</li>
-          <li>Alertas de ingresos y egresos para visibilidad básica de caja.</li>
-          <li>Configuración inicial del flujo de Telegram y prueba con datos de ejemplo.</li>
-          <li>Capacitación de uso para el equipo y ajustes menores posteriores a la entrega.</li>
-        </ul>
-
-        <article class="card">
-          <span class="tag">Resultado esperado</span>
-          <h3>Una herramienta que empuja acción, no solo almacena datos.</h3>
-          <p>La base no se queda como archivo muerto. Cada fecha y cada meta se convierte en una alerta para vender, fidelizar o corregir a tiempo.</p>
-        </article>
-      </div>
+      <ul class="compact-list">
+        <li>Base de datos en Excel diseñada para la operación medicinal de Healen.</li>
+        <li>Estructura para inventario, clientes, ingresos y egresos.</li>
+        <li>Formato listo para que el equipo lo use sin complicarse.</li>
+        <li>Capacitación inicial y ajustes de cierre para dejar la fase 1 funcionando.</li>
+      </ul>
     </section>
 
     <section id="inversion" class="investment">
       <div class="section-head">
-        <h2>Inversión especial para Healen</h2>
-        <p>Precio cerrado por ser una relación cercana y porque esta primera versión puede convertirse en la base de más automatizaciones comerciales para la marca.</p>
+        <h2>Inversión fase 1</h2>
+        <p>Precio especial por relación cercana, manteniendo una entrega seria y lista para operar.</p>
       </div>
 
       <div class="investment-box">
-        <article class="price-card">
-          <p class="price-label">Pago único</p>
-          <p class="price">$1.500.000 COP</p>
-          <p>Incluye construcción, configuración, pruebas, entrega y capacitación inicial. No incluye costos externos si se decide usar una herramienta premium adicional en el futuro.</p>
+        <article class="quote-card">
+          <p class="panel-label">Pago único</p>
+          <p class="price">$2.800.000 COP</p>
+          <p>Valor normal: $3.500.000 COP. Esta propuesta aplica como precio especial para iniciar la primera fase del sistema.</p>
         </article>
-        <article class="terms-card">
-          <h3>Forma de trabajo sugerida</h3>
+        <article class="quote-card">
+          <h3>Forma de pago</h3>
           <ul>
-            <li>50% para iniciar: $750.000 COP.</li>
-            <li>50% contra entrega funcional: $750.000 COP.</li>
-            <li>Tiempo estimado: 5 a 7 días hábiles desde la recepción de la información base.</li>
-            <li>Garantía de ajustes menores: 7 días posteriores a la entrega.</li>
+            <li>50% iniciando: $1.400.000 COP.</li>
+            <li>25% antes de terminar: $700.000 COP.</li>
+            <li>25% finalizando: $700.000 COP.</li>
           </ul>
         </article>
       </div>
     </section>
 
     <section id="aprobar" class="cta">
-      <h2>Si Healen quiere vender más sin que el seguimiento dependa de la memoria, este es el siguiente paso.</h2>
-      <p>
-        La automatización no reemplaza la relación con el cliente: la cuida. Le recuerda al equipo cuándo volver a aparecer, cuándo activar puntos, cuándo empujar una meta y cuándo revisar caja.
-      </p>
+      <h2>Fase 1 deja a Healen con el control que necesita para crecer sin desorden.</h2>
+      <p>Cuando inventario, clientes e ingresos están claros, las decisiones dejan de ser intuición y empiezan a ser gestión.</p>
       <div class="hero-actions" style="justify-content:center;">
-        <a class="button primary" href="https://wa.me/?text=Hola%20Solvers%2C%20aprobamos%20la%20cotizaci%C3%B3n%20de%20Healen%20para%20la%20base%20en%20Excel%20con%20alertas%20por%20Telegram.%20Queremos%20agendar%20el%20inicio." aria-label="Aprobar propuesta por WhatsApp">Aprobar y agendar inicio</a>
+        <a class="button primary" href="https://wa.me/?text=Hola%20Solvers%2C%20aprobamos%20la%20Fase%201%20de%20Healen%20por%20%242.800.000%20COP%20para%20control%20de%20inventario%2C%20clientes%2C%20ingresos%20y%20egresos.%20Queremos%20iniciar." aria-label="Aprobar fase 1 por WhatsApp">Aprobar fase 1</a>
       </div>
     </section>
   </main>
 
   <footer>
     <span>SolversAI · Cotización para Healen</span>
-    <span>Validez de la propuesta: 10 días · Pago único especial</span>
+    <span>Fase 1 · Pago único · Identidad blanco y morado</span>
   </footer>
 </body>
 </html>
