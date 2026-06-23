@@ -1,0 +1,13 @@
+{
+  "name": "cotizacion-healen-automatizacion",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cotizacion interactiva para sistema de Excel + Telegram de Healen",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node scripts/check.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
