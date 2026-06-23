@@ -26,4 +26,9 @@ if (missing.length) {
   process.exit(1);
 }
 
+if (html.includes("brand-mark")) {
+  console.error("Proposal should not include a header logo/brand mark.");
+  process.exit(1);
+}
+
 console.log("Proposal check passed.");

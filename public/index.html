@@ -36,9 +36,20 @@
       font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       line-height: 1.48;
       letter-spacing: 0;
+      overflow-x: hidden;
     }
 
     a { color: inherit; text-decoration: none; }
+
+    h1,
+    h2,
+    h3,
+    p,
+    li,
+    span,
+    a {
+      overflow-wrap: break-word;
+    }
 
     .topbar {
       position: fixed;
@@ -57,19 +68,7 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
       min-width: 0;
-    }
-
-    .brand-mark {
-      width: 42px;
-      height: 42px;
-      display: grid;
-      place-items: center;
-      border-radius: 8px;
-      color: white;
-      background: var(--purple-dark);
-      font-weight: 900;
     }
 
     .brand strong,
@@ -100,6 +99,7 @@
       color: var(--purple-dark);
       font-size: 14px;
       font-weight: 900;
+      text-align: center;
       transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
     }
 
@@ -404,12 +404,83 @@
       }
       footer { flex-direction: column; }
     }
+
+    @media (max-width: 520px) {
+      .topbar {
+        align-items: flex-start;
+        padding: 14px 18px;
+      }
+
+      .brand strong {
+        font-size: 14px;
+      }
+
+      .brand span {
+        font-size: 11px;
+      }
+
+      .hero {
+        padding: 34px 18px 38px;
+      }
+
+      .eyebrow {
+        font-size: 11px;
+        white-space: normal;
+      }
+
+      h1 {
+        font-size: 38px;
+        line-height: 0.98;
+      }
+
+      h2 {
+        font-size: 31px;
+        line-height: 1.04;
+      }
+
+      .lead,
+      .section-head p,
+      .cta p {
+        font-size: 16px;
+      }
+
+      .hero-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .button {
+        width: 100%;
+        min-height: 46px;
+      }
+
+      .price-panel,
+      .card,
+      .quote-card {
+        padding: 20px;
+      }
+
+      .price {
+        font-size: 40px;
+      }
+
+      .investment .price {
+        font-size: 42px;
+      }
+
+      section {
+        padding: 46px 18px;
+      }
+
+      .compact-list li {
+        font-size: 16px;
+      }
+    }
   </style>
 </head>
 <body>
   <header class="topbar">
     <a class="brand" href="#inicio" aria-label="Inicio">
-      <span class="brand-mark">H</span>
       <span>
         <strong>Healen · Fase 1</strong>
         <span>Control medicinal operativo</span>
